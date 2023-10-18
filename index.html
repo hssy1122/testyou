@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Quickness and Fuselage Vision Test</title>
+
+    <style type="text/css">
+        body { margin: 0; cursor: url('mouse copy.png'), auto; } 
+        .col-1 { width: 100%; height: 100vh; }
+        .col-2 {top:80%; left: 50%;}
+        .bg-black { background-color: black; }
+        .dot {position: absolute; width: 5px; height: 5px;
+            background-color: white; border-radius: 100%;
+            animation: fadeOut 1s ease-in-out; z-index: 97;
+            }
+
+    
+        #testText {
+            position: fixed; color: white;
+            font-size: 3rem; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            line-height: 1.9;
+            font-family: 'jeonjuCraftGoR';
+            z-index: 0;}
+
+        .dot-container {position: absolute; top: 0;
+            left: 0; width: 100%; height: 100%;}
+
+        @keyframes fadeOut {
+            0% { opacity: 1; } 
+            100% { opacity: 0; }}
+
+        @font-face {
+            font-family: 'JeonjuCraftGoR';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2310@1.0/JeonjuCraftGoR.woff2') format('woff2');
+            font-weight: normal; font-style: normal;}
+
+        .popup {
+            width: 1000px; height: 350px;
+             text-align: center;
+            margin: auto; background: #23FC8C;
+            font-size: 4rem; padding: 40px;
+            word-wrap: break-word; box-sizing: border-box;
+            opacity: 0; display: none;
+            z-index: 99; animation: fade 0.8s forwards;
+            margin-top: -700px;
+            position: relative;
+            border-radius: 10px;}
+
+        @keyframes fade {
+            from { opacity: 0; }
+            to { opacity: 1; }}
+
+        #open {
+            position: fixed; top: 80%; left: 50%; z-index: 99; transform: translate(-50%, -50%);display: none; font-family: 'jeonjuCraftGoR';}
+        #cls{
+            position: fixed; top: 53%; left: 63%; z-index: 99; display: none; font-family: 'jeonjuCraftGoR';}
+
+        #submitBtn{
+            position: fixed; top: 53%; left: 56%; z-index: 99; display: none; font-family: 'jeonjuCraftGoR';}
+
+        #nextBtn{
+             position: fixed; top: 53%; left: 58.8%;  z-index: 99; display: none; font-family: 'jeonjuCraftGoR';}
+
+        #nameInput{
+            position: fixed; top: 45%; left: 50%;
+            transform: translate(-50%, -50%); z-index: 99; display: none; font-family: 'jeonjuCraftGoR';}
+
+         #ageInput{
+            position: fixed; top: 48%;  left: 50%;
+            transform: translate(-50%, -50%); z-index: 99; display: none; font-family: 'jeonjuCraftGoR';}
+
+        #next {
+            position: fixed; top: 37%; left: 50%; transform: translate(-50%, -50%);
+             z-index: 99; display: none;
+            font-size: 1rem; color: black;
+            animation: fade 0.8s forwards;
+            font-family: 'jeonjuCraftGoR';
+            line-height: 1.9;
+        }
+
+
+
+    </style>
+</head>
+
+<body>
+    <div class="bg-black col-1"></div>
+    <div id="testText"></div>
+    <div class="dot-container"></div>
+    <button id="open">준비완료</button>
+    <div class="popup" id="popup"><br><button id="cls">닫기</button></div>
+    <button id="submitBtn">입력</button>
+    <button id="nextBtn" onclick="navigateToNextPage()">다음으로</button>
+    <audio id="clickSound" src="click.mp3"></audio>
+
+
+
+    <input type="text" id="nameInput" placeholder="이름을 입력하세요">
+    <input type="text" id="ageInput" placeholder="나이를 입력하세요">
+    <div id = "next"></div>
+
+    <script type="text/javascript">
+        let a = "mouse1.png";
+        let dots = [];
+        let dotContainer = document.querySelector(".dot-container");
+
+        window.onmousemove = function(e) {
+            let dot = document.createElement('div');
+            dot.className = 'dot';
+            dot.style.left = e.clientX + 'px';
+            dot.style.top = e.clientY + 'px';
+            dot.innerHTML = "<img src='" + a + "'alt='mouse'>";
+            dotContainer.appendChild(dot);
+            dots.push(dot);
+
+            
+            setTimeout(function() {
+                if (dots.length > 0) {
+                    dotContainer.removeChild(dots.shift()); }}, 1000);}
+
+        var testText = document.getElementById("testText");
+        var test = "환영합니다. <br> 지금부터 간단한 게임을 통해 <br> 당신의 동체시력과 반응속도를 <br> 테스트 해보도록 하겠습니다.<br> 준비가 완료되면 버튼을 눌러주세요."
+
+        var testArr = test.split(" ");
+        
+        var myTimer = setInterval(print, 200);
+        var s = 0;
+        function print() {
+            testText.innerHTML += testArr[s] + " ";
+            s++;
+            if (s == testArr.length) {
+                clearInterval(myTimer);}}
+
+        let openButton = document.getElementById("open");
+        let closeButton = document.getElementById("cls");
+        let submitButton = document.getElementById("submitBtn");
+        let nextButton = document.getElementById("nextBtn");
+        let nameInput = document.getElementById("nameInput");
+        let ageInput = document.getElementById("ageInput");
+        let next = document.getElementById("next");
+
+        setTimeout(function() {
+            openButton.style.display = "block";
+        }, 4000);
+
+        setTimeout(function() {
+            closeButton.style.display = "block";}, 4000);
+
+        openButton.onclick = function() {
+            document.body.style.background = "none";
+            document.getElementById("popup").style.display = "block";
+            document.getElementById("submitBtn").style.display = "block";
+            document.getElementById("nameInput").style.display = "block";
+            document.getElementById("ageInput").style.display = "block";
+            document.getElementById("nextBtn").style.display = "block";
+        }
+
+        submitButton.onclick = function() {
+            next.innerHTML = "당신의 이름은 " + nameInput.value + ", 나이는 " + ageInput.value + "세 입니다." + "<br>" +  "정보가 맞다면 다음으로 버튼을 눌러주세요.";
+            next.style.display = "block";
+        }
+
+        closeButton.onclick = function() {
+            document.getElementById("popup").style.animation = "fade 1s reverse forwards";
+            document.getElementById("submitBtn").style.animation = "fade 0.1s reverse forwards";
+            document.getElementById("nameInput").style.animation = "fade 0.1s reverse forwards";
+            document.getElementById("ageInput").style.animation = "fade 0.1s reverse forwards";
+            document.getElementById("nextBtn").style.animation = "fade 0.1s reverse forwards";
+        }
+           
+        document.getElementById("popup").addEventListener("animationend", function() {
+            document.getElementById("popup").style.display = "block";
+            document.body.style.background = "none";
+        });
+
+        function navigateToNextPage() {
+    window.location.href = 'index_quicknesstest.html';
+}
+
+var clickSound = document.getElementById("clickSound");
+
+document.getElementById("open").addEventListener("click", function() {
+    clickSound.play();
+});
+
+document.getElementById("submitBtn").addEventListener("click", function() {
+    clickSound.play();
+});
+
+document.getElementById("nextBtn").addEventListener("click", function() {
+    clickSound.play();
+});
+
+document.getElementById("cls").addEventListener("click", function() {
+    clickSound.play();
+});
+
+
+    </script>
+</body>
+</html>

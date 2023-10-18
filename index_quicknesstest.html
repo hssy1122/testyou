@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Quicknesstest</title>
+    <style type="text/css">
+        @font-face {
+            font-family: 'NeoDunggeunmoPro-Regular';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.0/NeoDunggeunmoPro-Regular.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        #testText {
+            position: fixed;
+            color: black;
+            font-size: 1.5rem;
+            top: 3%;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            line-height: 1.9;
+            font-family: 'NeoDunggeunmoPro-Regular';
+            z-index: 0;
+        }
+
+        body {
+            margin: 0;
+        }
+
+        .bg-black {
+            background-color: black;
+            opacity: 1;
+            animation: fadeOut 1s ease-in-out forwards;
+        }
+
+        .col-1 {
+            width: 100%;
+            height: 100vh;
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+            }
+        }
+
+        .square {
+            width: 1000px;
+            height: 350px;
+            text-align: center;
+            margin: auto;
+            background: #23FC8C;
+            padding: 10px;
+            box-sizing: border-box;
+            opacity: 1; /* 변경: 초기에는 1로 설정 */
+            display: block; /* 변경: 초기에는 보이도록 설정 */
+            z-index: 99;
+            animation: fade 0.8s forwards;
+            margin-top: -700px;
+            position: relative;
+            border-radius: 10px;
+        }
+
+        .third {
+            height: 20vh;
+            background: red;
+            width: 250px;
+            margin-left: -300px;
+            margin-top: 0px;
+            position: fixed;
+            z-index: 1;
+        }
+
+        input[type="color"] {
+            margin-left: 20px;
+        }
+
+        #clear {
+            position: fixed; top: 50%; left: 10%; z-index: 99; transform: translate(-50%, -50%);display: block; font-family: 'jeonjuCraftGoR';}
+
+    </style>
+</head>
+<body>
+    <div class="bg-black col-1"></div>
+    <div id="testText"></div>
+    <audio id="clickSound" src="click.mp3"></audio>
+
+    <div class="square" onclick="checkReactionTime()">
+        <div class="third" id="w1" style="background:#23FC8C;">
+            <input type="color" id="colorPicker" onchange="changeThirdColor()">
+        </div>
+    </div>
+     <button id="clear" onclick="startTest()">확인</button>
+
+    <script type="text/javascript">
+    var testText = document.getElementById("testText");
+    var square = document.querySelector(".square");
+    var third = document.getElementById("w1");
+    var colorPicker = document.getElementById("colorPicker");
+    var clearButton = document.getElementById("clear");
+
+    var test = "반응속도 테스트 (난이도 쉬움)<br>먼저 초록색을 제외한 컬러를 선택한 후 <br> 확인 버튼을 누르면 테스트가 시작됩니다.<br> 선택한 색에서 초록색으로 변하면 네모를 클릭하세요.";
+
+    var testArr = test.split(" ");
+    var myTimer;
+
+    var myTimer = setInterval(print, 150);
+        var s = 0;
+        function print() {
+            testText.innerHTML += testArr[s] + " ";
+            s++;
+            if (s == testArr.length) {
+                clearInterval(myTimer);}}
+
+    function changeThirdColor() {
+        var newColor = colorPicker.value;
+        third.style.backgroundColor = newColor;
+        square.style.backgroundColor = newColor;
+    }
+
+  var colorChangeTime; // 컬러가 바뀐 시간을 저장할 변수
+
+function startTest() {
+    clearButton.style.display = "none"; // 버튼을 숨깁니다.
+
+    // 5초 후에 square의 색을 #23FC8C로 변경합니다.
+    setTimeout(function() {
+        square.style.backgroundColor = "#23FC8C";
+        colorChangeTime = Date.now(); // 컬러가 바뀐 시간 기록
+
+        // square의 색이 변한 후 반응 시간을 측정합니다.
+      square.addEventListener("click", function() {
+    if (square.style.backgroundColor === "rgb(35, 252, 140)") { // 확인 버튼을 누르기 전에만 측정
+        var reactionTime = Date.now() - colorChangeTime; // 버튼 클릭 시간과 컬러 변경 시간의 차이 계산
+        alert("반응 시간: " + (reactionTime / 1000).toFixed(2) + " 초\n" + 
+            "0.02초 (20대)\n" +
+            "0.03초 (30대)\n" +
+            "0.04초 (40~50대)");
+    }
+});
+
+
+        // 팝업 띄우기
+        setTimeout(function() {
+            square.removeEventListener("click"); // 반응 시간 측정 종료
+        }, 0);
+    }, 5000);
+}
+
+square.addEventListener("click", function() {
+    square.data = { time: Date.now() };
+});
+
+var clickSound = document.getElementById("clickSound");
+
+// "확인" 버튼 클릭 시 클릭 효과음 재생
+document.getElementById("clear").addEventListener("click", function() {
+    clickSound.play();
+});
+
+// 네모 클릭 시 클릭 효과음 재생
+square.addEventListener("click", function() {
+    clickSound.play();
+});
+
+
+</script>
+</body>
+</html>
